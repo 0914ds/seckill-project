@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableCircuitBreaker
 //@EnableFeignClients
 @EnableHystrix
-public class WebApplication {
+public class WebApplication  {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(WebApplication.class, args);

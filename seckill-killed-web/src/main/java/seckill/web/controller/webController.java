@@ -1,19 +1,12 @@
 package seckill.web.controller;
 
-import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.*;
 import seckill.common.dto.Exposer;
 import seckill.common.dto.SeckillExecution;
 import seckill.common.dto.SeckillResult;
@@ -23,11 +16,14 @@ import seckill.common.exception.SeckillCloseException;
 import seckill.common.model.Seckill;
 import seckill.web.service.WebService;
 
+import java.util.Date;
+import java.util.List;
+
 @Controller
 @RequestMapping("/seckill")
 public class webController {
 
-	private Log LOG = LogFactory.getLog(this.getClass());
+	private Log log = LogFactory.getLog(this.getClass());
 
 	@Autowired
 	private WebService webService;
@@ -39,10 +35,9 @@ public class webController {
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model) {
-		// list.jsp + model = ModelAndView
-		// 获取列表页
 		List<Seckill> list = webService.getSeckillList();
 		model.addAttribute("list", list);
+		log.info("get SeckillList ==>"+list);
 		return "list";
 	}
 
@@ -61,6 +56,7 @@ public class webController {
 
 		model.addAttribute("seckill", seckill);
 
+		log.info("get by id ==>"+seckill);
 		return "detail";
 
 	}
@@ -77,7 +73,7 @@ public class webController {
 			Exposer exposer = webService.exportSeckillUrl(seckillId);
 			result = new SeckillResult<Exposer>(true, exposer);
 		} catch (Exception e) {
-			LOG.error(e.getMessage());
+			log.error(e.getMessage());
 			result = new SeckillResult<Exposer>(false, e.getMessage());
 		}
 
@@ -108,7 +104,7 @@ public class webController {
 			return new SeckillResult<SeckillExecution>(true, execution);
 
 		} catch (Exception e) {
-			LOG.error(e.getMessage());
+			log.error(e.getMessage());
 			SeckillExecution execution = new SeckillExecution(seckillId, SeckillStatEnum.INNER_ERROR);
 			return new SeckillResult<SeckillExecution>(true, execution);
 		}
