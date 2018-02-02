@@ -1,0 +1,51 @@
+pom中的两个依赖如下 两个依赖中都有slf4j，启动是会有如下异常。解决方案如下。
+依赖：
+<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+</dependency>
+<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
+</dependency>
+异常：
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/C:/Users/DELL/.m2/repository/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/C:/Users/DELL/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+Exception in thread "main" java.lang.IllegalAccessError: tried to access method org.springframework.core.io.support.SpringFactoriesLoader.loadFactoryNames(Ljava/lang/Class;Ljava/lang/ClassLoader;)Ljava/util/List; from class org.springframework.boot.SpringApplication
+	at org.springframework.boot.SpringApplication.getSpringFactoriesInstances(SpringApplication.java:393)
+	at org.springframework.boot.SpringApplication.getSpringFactoriesInstances(SpringApplication.java:385)
+	at org.springframework.boot.SpringApplication.initialize(SpringApplication.java:261)
+	at org.springframework.boot.SpringApplication.<init>(SpringApplication.java:237)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1191)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1180)
+	at cloud.config.server.ConfigServerApplication.main(ConfigServerApplication.java:19)
+解决方案 （二选一）：
+<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions> 
+</dependency>
+        或者
+<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
+</dependency>
+	
