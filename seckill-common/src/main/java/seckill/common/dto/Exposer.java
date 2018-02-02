@@ -11,7 +11,7 @@ public class Exposer implements Serializable {
     private static final long serialVersionUID = 7602244494037452541L;
 
     /**
-     * 秒杀是否�?�?
+     * 秒杀是否�?�?
      */
     private boolean exposed;
 
